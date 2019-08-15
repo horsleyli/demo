@@ -26,9 +26,8 @@ public class MyInterceptor extends HandlerInterceptorAdapter {
     }
 
     @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object o, Exception e) throws Exception {
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object o, Exception e) {
 
         System.out.println("MyInterceptor afterCompletion run!");
-        super.afterCompletion(request, response, o, e);
     }
 }
