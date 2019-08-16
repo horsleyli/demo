@@ -4,6 +4,8 @@ import com.cjbs.demo.annotation.MyAnnotation;
 import com.cjbs.demo.service.cook.Cook;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 /**
@@ -16,10 +18,24 @@ import org.springframework.stereotype.Component;
  *      1.通过类匹配模式串声明切点，within()函数定义的连接点是针对目标类而言的，而非针对运行期对象的类型而言，这一点和execution()是相同的。
  *      2.但是within()和execution()函数不同的是，within()所指定的连接点最小范围只能是类，而execution()所指定的连接点可以大到包，小到方法入参。
  *          所以从某种意义上讲，execution()函数功能涵盖了within()函数的功能
+ *
+ *--   什么是AOP切面编程
+ *       1.在运行时，动态地将代码切入到类的指定方法、指定位置上的编程思想就是面向切面的编程。
+ *       2.AOP是Spring提供的关键特性之一。AOP即面向切面编程，是OOP编程的有效补充。
+ *       3.使用AOP技术，可以将一些系统性相关的编程工作，独立提取出来，独立实现，然后通过切面切入进系统。
+ *       4.从而避免了在业务逻辑的代码中混入很多的系统相关的逻辑——比如权限管理，事物管理，日志记录等等。
+ *          权限管理：可以在对象或方法执行之前使用@Around判断用户权限，符合要求执行切入点的procced()方法，不符合要求抛出异常等
+ *          日志记录：可记录切入点执行日志，如下示例
+ *
  */
 @Aspect
 @Component
 public class JoinPointAspect {
+
+    /**
+     * 日志记录
+     */
+    private final Logger logger = LoggerFactory.getLogger(JoinPointAspect.class);
 
     public JoinPointAspect() {}
 
@@ -33,16 +49,22 @@ public class JoinPointAspect {
      * @throws Throwable Throwable
      */
     @Around("makeCookClass()")
-    public void test(ProceedingJoinPoint pjp) throws Throwable {
+    public Object test(ProceedingJoinPoint pjp) throws Throwable {
         System.out.println("---------获取连接点对象【开始】---------");
         System.out.println("参数：" + pjp.getArgs()[0]);
         System.out.println("签名对象：" + pjp.getTarget().getClass());
 
-        //执行目标对象方法  如果不写则被控制对象方法不执行
-        pjp.proceed();
+        Object result = null;
+        try{
+            //执行目标对象方法  如果不写则被控制对象方法不执行
+            result = pjp.proceed();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         System.out.println("---------获取连接点对象【结束】---------");
 
+        return result;
     }
 
     /**
@@ -51,14 +73,24 @@ public class JoinPointAspect {
     @Pointcut("execution(* com.cjbs.demo.service.cook.CookC.good())")
     public void getMethod(){}
     @Around("getMethod()")
-    public void testMethod(ProceedingJoinPoint pjp) throws Throwable {
+    public Object testMethod(ProceedingJoinPoint pjp) throws Throwable {
+        //日志记录
+        logger.debug("log sign object {}", pjp.getTarget().getClass());
+
         System.out.println("---------获取连接点方法【开始】---------");
         System.out.println("签名对象：" + pjp.getTarget().getClass());
 
-        //执行目标对象方法  如果不写则被控制对象方法不执行
-        pjp.proceed();
+        Object result = null;
+        try{
+            //执行目标对象方法  如果不写则被控制对象方法不执行
+            result = pjp.proceed();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         System.out.println("---------获取连接点方法【结束】---------");
+
+        return result;
     }
 
 
@@ -75,7 +107,7 @@ public class JoinPointAspect {
      * @param name name
      * @param num num
      */
-    @Before("target(com.cjbs.demo.service.cook.CookA) && args(name,num)")
+    @Before(value = "target(com.cjbs.demo.service.cook.CookA) && args(name,num)", argNames = "name,num")
     public void test1(String name, int num) {
         System.out.println("---------绑定连接点入参【开始】--------");
         System.out.println("name" + name);
@@ -93,7 +125,7 @@ public class JoinPointAspect {
      *
      * @param cook cook
      */
-    @Before("this(cook)")
+    @Before(value = "this(cook)", argNames = "cook")
     public void bind(Cook cook) {
         System.out.println("--------绑定代理对象【开始】--------");
         System.out.println(cook.getClass().getName());
