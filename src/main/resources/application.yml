@@ -2,9 +2,27 @@ debug: true
 spring:
   devtools:
     restart:
-      enabled: true  #设置开启热部署
+      enabled: true
   freemarker:
-    cache: false     #页面不加载缓存，修改即时生效
+    cache: false
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/demo?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8
+    username: root
+    password: tiger
+  cache:
+    type: redis
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    timeout: 1000
+    password: tiger
+    jedis:
+      pool:
+        max-idle: 8
+        min-idle: 2
+        max-wait: 100
+        max-active: 10
 
 
 logging:
@@ -12,4 +30,4 @@ logging:
     org:
       springframework:
         boot:
-          autoconfigure: ERROR    #去掉启动时大量 CONDITIONS EVALUATION REPORT
+          autoconfigure: ERROR

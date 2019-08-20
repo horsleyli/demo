@@ -27,6 +27,9 @@ import org.springframework.stereotype.Component;
  *          权限管理：可以在对象或方法执行之前使用@Around判断用户权限，符合要求执行切入点的procced()方法，不符合要求抛出异常等
  *          日志记录：可记录切入点执行日志，如下示例
  *
+ *--   提高：spring中的多线程aop方法拦截 (待学习)
+ *          使用CGLib 大致原理：CGLib会从被代理的类，派生出一个子类，然后在子类中覆写所有非final的public方法，从而达到"方法增强"的效果
+ *
  */
 @Aspect
 @Component
