@@ -24,6 +24,10 @@ spring:
         max-wait: 100
         max-active: 10
 
+# AuditorConfiguration
+  main:
+    allow-bean-definition-overriding: true
+
 
 logging:
   level:

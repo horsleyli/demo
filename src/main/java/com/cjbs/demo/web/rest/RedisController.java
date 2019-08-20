@@ -3,10 +3,9 @@ package com.cjbs.demo.web.rest;
 
 import com.cjbs.demo.domain.User;
 import com.cjbs.demo.service.UserService;
-import com.cjbs.demo.service.redis.RedisTemplateService;
+import com.cjbs.demo.service.RedisTemplateService;
 import com.cjbs.demo.web.dto.UserDTO;
 import com.codahale.metrics.annotation.Timed;
-import org.apache.tomcat.util.http.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;

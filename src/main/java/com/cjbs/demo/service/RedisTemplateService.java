@@ -1,4 +1,4 @@
-package com.cjbs.demo.service.redis;
+package com.cjbs.demo.service;
 
 import com.cjbs.demo.domain.User;
 import org.springframework.data.redis.core.RedisTemplate;

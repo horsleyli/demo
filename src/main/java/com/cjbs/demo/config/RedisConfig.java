@@ -26,7 +26,6 @@ import java.time.Duration;
 @EnableCaching
 public class RedisConfig extends CachingConfigurerSupport {
 
-
     /**
      * 设置Redis缓存
      * @param redisConnectionFactory redisConnectionFactory
