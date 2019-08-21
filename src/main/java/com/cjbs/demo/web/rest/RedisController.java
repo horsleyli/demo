@@ -65,6 +65,7 @@ public class RedisController {
 
     /**
      * 测试Redis缓存   update
+     * 注解@Valid 检测的是实体中的约束，比如@NotNull @Pattern @NotBlank等
      * @param userDTO userDTO
      * @return User
      */

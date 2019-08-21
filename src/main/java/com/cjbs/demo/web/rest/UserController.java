@@ -7,8 +7,10 @@ import com.codahale.metrics.annotation.Timed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 
 /**
  * @author shj
@@ -52,5 +54,6 @@ public class UserController {
         UserDTO createUser = userService.createUser(userDTO);
         return new ResponseEntity<>(createUser, HttpStatus.CREATED);
     }
+
 
 }
