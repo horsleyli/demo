@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -59,7 +60,7 @@ public class RedisController {
      */
     @GetMapping("/testCacheRedis")
     @Timed
-    public ResponseEntity<Optional<User>> testCacheRedis(@RequestParam String id) {
+    public ResponseEntity<User> testCacheRedis(@RequestParam String id) {
         return new ResponseEntity<>(userService.getUserById(id), HttpStatus.OK);
     }
 
@@ -84,5 +85,17 @@ public class RedisController {
     @Timed
     public void testRedisDelete(@RequestParam String id) {
         userService.deleteUser(id);
+    }
+
+    /**
+     * 测试手动缓存
+     * @param age age
+     * @return User
+     */
+    @GetMapping("/testGetUserByAgeHand")
+    @Timed
+    public ResponseEntity<List<User>> testGetUserByAgeHand(@RequestParam String age) {
+        List<User> userOptional = userService.getAllByAgeHand(age);
+        return new ResponseEntity<>(userOptional, HttpStatus.OK);
     }
 }

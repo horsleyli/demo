@@ -8,9 +8,13 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * @author shj
@@ -20,8 +24,11 @@ public class UserService {
 
     private UserRepository userRepository;
 
-    public UserService(UserRepository userRepository) {
+    private RedisTemplate redisTemplate;
+
+    public UserService(UserRepository userRepository, RedisTemplate redisTemplate) {
         this.userRepository = userRepository;
+        this.redisTemplate = redisTemplate;
     }
 
     /**
@@ -58,15 +65,16 @@ public class UserService {
 //    5.@CacheEvict(key="'userCache'")主要针对方法配置，能够根据一定的条件对缓存进行清空，一般用于delete（）操作
 //    6.本例中的@Cacheable和@CachePut和@CacheEvict的key值必须都是同一个缓存的key，因为这样当update的时候缓存的时候，get方法的得到的才是最新数据，而当删除的时候@CacheEvict，也必须把该key的缓存删除。
 
+//注解模式、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、
     /**
      * 查询数据并将数据存储到Redis
      * @param id id
      * @return User
      */
     @Cacheable(value = "user", key = "#p0")
-    public Optional<User> getUserById(String id) {
+    public User getUserById(String id) {
         System.out.println("执行这里，说明缓存中读取不到数据，直接读取数据库......");
-        return userRepository.findById(id);
+        return userRepository.findById(id).get();
     }
 
     /**
@@ -93,5 +101,27 @@ public class UserService {
             userRepository.delete(user);
         }
     }
+//手动添加缓存、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、
+    /**
+     * 查询数据并将数据存储到Redis
+     * @param age age
+     * @return User
+     */
+    public List<User> getAllByAgeHand(String age) {
+        String redisKey = "userRedis" + age;
+        List<User> users = null;
+        if(redisTemplate.opsForSet().members(redisKey).isEmpty()){
+            System.out.println("执行这里，说明缓存中读取不到数据，直接读取数据库......");
+            users = userRepository.getAllByAge(age).get();
+            redisTemplate.opsForSet().add(redisKey, users);
+        } else {
+            System.out.println("执行这里，说明缓存中有数据，读取缓存数据......");
+            Set userSet= redisTemplate.opsForSet().members(redisKey);
+            users =  new ArrayList<>(userSet);
+        }
+
+        return users;
+    }
+
 
 }

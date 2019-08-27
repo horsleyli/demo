@@ -34,7 +34,5 @@ public class RedisTemplateService {
 
         redisTemplate.opsForValue().set("user",user);
         System.out.println(this.redisTemplate.opsForValue().get("user"));
-
-
     }
 }

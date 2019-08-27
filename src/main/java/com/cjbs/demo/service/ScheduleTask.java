@@ -23,7 +23,7 @@ public class ScheduleTask {
     //一天
     private static final long ONE_DAY = 60 * 60 * 1000 *24;
     //5秒
-    private static final long ONE_SECONDS = 1000;
+    private static final long ONE_SECONDS = 5000;
 
     @Scheduled(fixedRate = ONE_SECONDS)
     public void scheduledTask() {
