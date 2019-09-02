@@ -17,6 +17,7 @@ spring:
     port: 6379
     timeout: 1000
     password: tiger
+    database: 6
     jedis:
       pool:
         max-idle: 8
@@ -24,9 +25,25 @@ spring:
         max-wait: 100
         max-active: 10
 
-# AuditorConfiguration
+
+  # AuditorConfiguration
   main:
     allow-bean-definition-overriding: true
+
+
+  application:
+    name: spring-boot-rabbitmq-sender
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: root
+    password: 123456
+    virtual-host: /testmq
+    listener:
+      simple:
+        #acknowledge-mode: manual #设置确认模式手工确认
+        concurrency: 3 #消费者最小数量
+        max-concurrency: 10 # 消费者最大数量
 
 
 logging:

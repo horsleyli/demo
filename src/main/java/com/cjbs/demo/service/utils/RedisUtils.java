@@ -16,11 +16,11 @@ import java.util.concurrent.TimeUnit;
  * 项目中未用到(留存)
  */
 @Component
-public class RedisUtil {
+public class RedisUtils {
 
     private RedisTemplate<String, Object> redisTemplate;
 
-    public RedisUtil(RedisTemplate<String, Object> redisTemplate) {
+    public RedisUtils(RedisTemplate<String, Object> redisTemplate) {
         this.redisTemplate = redisTemplate;
     }
 

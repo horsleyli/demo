@@ -1,7 +1,7 @@
 package com.cjbs.demo.web.rest.error;
 
 
-import com.cjbs.demo.service.utils.ApiResult;
+import com.cjbs.demo.service.utils.ApiResultUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,28 +15,28 @@ public class TestException {
 
     /**
      * testRuntimeException
-     * @return ApiResult
+     * @return ApiResultUtils
      */
     @GetMapping("/testRuntimeException")
-    public ApiResult testRuntimeException() {
+    public ApiResultUtils testRuntimeException() {
         throw new RuntimeException();
     }
 
     /**
      * testArithmeticException
-     * @return ApiResult
+     * @return ApiResultUtils
      */
     @GetMapping("/testArithmeticException")
-    public ApiResult testArithmeticException() {
+    public ApiResultUtils testArithmeticException() {
         throw new ArithmeticException();
     }
 
     /**
      * testIllegalArgumentException
-     * @return ApiResult
+     * @return ApiResultUtils
      */
     @GetMapping("/testIllegalArgumentException")
-    public ApiResult testException() {
+    public ApiResultUtils testException() {
         throw new IllegalArgumentException();
     }
 }

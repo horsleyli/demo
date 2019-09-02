@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -94,7 +95,7 @@ public class RedisController {
      */
     @GetMapping("/testGetUserByAgeHand")
     @Timed
-    public ResponseEntity<List<User>> testGetUserByAgeHand(@RequestParam String age) {
+    public ResponseEntity<List<User>> testGetUserByAgeHand(@RequestParam String age) throws IOException {
         List<User> userOptional = userService.getAllByAgeHand(age);
         return new ResponseEntity<>(userOptional, HttpStatus.OK);
     }

@@ -4,6 +4,8 @@ package com.cjbs.demo.service;
 import com.cjbs.demo.domain.User;
 import com.cjbs.demo.repository.UserRepository;
 import com.cjbs.demo.web.dto.UserDTO;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -11,10 +13,12 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author shj
@@ -26,9 +30,12 @@ public class UserService {
 
     private RedisTemplate redisTemplate;
 
-    public UserService(UserRepository userRepository, RedisTemplate redisTemplate) {
+    private ObjectMapper objectMapper;
+
+    public UserService(UserRepository userRepository, RedisTemplate redisTemplate, ObjectMapper objectMapper) {
         this.userRepository = userRepository;
         this.redisTemplate = redisTemplate;
+        this.objectMapper = objectMapper;
     }
 
     /**
@@ -107,17 +114,28 @@ public class UserService {
      * @param age age
      * @return User
      */
-    public List<User> getAllByAgeHand(String age) {
+    public List<User> getAllByAgeHand(String age) throws IOException {
         String redisKey = "userRedis" + age;
         List<User> users = null;
         if(redisTemplate.opsForSet().members(redisKey).isEmpty()){
             System.out.println("执行这里，说明缓存中读取不到数据，直接读取数据库......");
             users = userRepository.getAllByAge(age).get();
-            redisTemplate.opsForSet().add(redisKey, users);
+            for(User user : users) {
+                //序列化user对象
+                String jsonString = objectMapper.writeValueAsString(user);
+                redisTemplate.opsForSet().add(redisKey, jsonString);
+            }
+            //设置key过期时间1800s
+            redisTemplate.expire(redisKey, 1800, TimeUnit.SECONDS);
         } else {
             System.out.println("执行这里，说明缓存中有数据，读取缓存数据......");
-            Set userSet= redisTemplate.opsForSet().members(redisKey);
-            users =  new ArrayList<>(userSet);
+            Set set= redisTemplate.opsForSet().members(redisKey);
+            List<String> list =  new ArrayList<>(set);
+            for(String str : list) {
+                //反序列化user对象
+                User user = objectMapper.readValue(str, User.class);
+                users.add(user);
+            }
         }
 
         return users;

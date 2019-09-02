@@ -1,6 +1,6 @@
 package com.cjbs.demo.web.rest.error;
 
-import com.cjbs.demo.service.utils.ApiResult;
+import com.cjbs.demo.service.utils.ApiResultUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -22,9 +22,9 @@ public class GlobalExceptionHandler {
      * @return String
      */
     @ExceptionHandler(RuntimeException.class)
-    public ApiResult runtimeExceptionHandler(RuntimeException ex) {
+    public ApiResultUtils runtimeExceptionHandler(RuntimeException ex) {
         ex.printStackTrace();
-        return new ApiResult(12, ex.getMessage(), ex.getStackTrace());
+        return new ApiResultUtils(12, ex.getMessage(), ex.getStackTrace());
 
     }
 
@@ -34,9 +34,9 @@ public class GlobalExceptionHandler {
      * @return String
      */
     @ExceptionHandler(ArithmeticException.class)
-    public ApiResult arithmeticException(ArithmeticException ex) {
+    public ApiResultUtils arithmeticException(ArithmeticException ex) {
         ex.printStackTrace();
-        return new ApiResult(13, ex.getMessage(), ex.getStackTrace());
+        return new ApiResultUtils(13, ex.getMessage(), ex.getStackTrace());
     }
 
     /**
@@ -45,9 +45,9 @@ public class GlobalExceptionHandler {
      * @return String
      */
     @ExceptionHandler(Exception.class)
-    public ApiResult exception(Exception ex) {
+    public ApiResultUtils exception(Exception ex) {
         ex.printStackTrace();
-        return new ApiResult(14, ex.getMessage(), ex.getStackTrace());
+        return new ApiResultUtils(14, ex.getMessage(), ex.getStackTrace());
     }
 
 }

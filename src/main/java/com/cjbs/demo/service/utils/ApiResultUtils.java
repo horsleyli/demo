@@ -7,7 +7,7 @@ import lombok.Data;
  * @param <T>
  */
 @Data
-public class ApiResult<T> {
+public class ApiResultUtils<T> {
 
     private int code = 200;
 
@@ -15,20 +15,20 @@ public class ApiResult<T> {
 
     private T data;
 
-    public ApiResult() {}
+    public ApiResultUtils() {}
 
-    public ApiResult(int code, String msg, T data) {
+    public ApiResultUtils(int code, String msg, T data) {
         this.code = code;
         this.msg = msg;
         this.data = data;
     }
 
-    public ApiResult(int code, String msg) {
+    public ApiResultUtils(int code, String msg) {
         this.code = code;
         this.msg = msg;
     }
 
-    public ApiResult(T data, String msg) {
+    public ApiResultUtils(T data, String msg) {
         this.data = data;
         this.msg = msg;
     }
