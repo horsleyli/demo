@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import java.util.Optional;
 
 /**
+ * 审计功能
  * @author shj
  */
 @Configuration

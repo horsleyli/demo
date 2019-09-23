@@ -133,6 +133,13 @@
             <scope>compile</scope>
         </dependency>
 
+        <!--Rabbitmq-->
+        <dependency>
+            <groupId>com.rabbitmq</groupId>
+            <artifactId>amqp-client</artifactId>
+            <version>3.4.1</version>
+        </dependency>
+
 
     </dependencies>
 
