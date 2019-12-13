@@ -6,10 +6,12 @@ import com.cjbs.demo.web.dto.UserDTO;
 import com.codahale.metrics.annotation.Timed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 
 
 /**
@@ -35,9 +37,10 @@ public class UserController {
      */
     @GetMapping("/Name")
     @Timed
-    public ResponseEntity<User> getAgeByName(@RequestParam String name) {
+    public ResponseEntity<User> getAgeByName(Pageable pageable, @RequestParam String name) {
         logger.debug("REST to request get age by name");
 
+        System.out.println(pageable);
         User user = userService.getAgeByName(name);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }

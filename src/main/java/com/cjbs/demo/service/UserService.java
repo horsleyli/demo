@@ -10,6 +10,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -39,11 +41,28 @@ public class UserService {
     }
 
     /**
-     * 根据姓名查询年龄
+     * 根据姓名查询年龄   注释部分为解决jpa自带函数如何排序问题(分页和不分页)
      * @param name name
      * @return User
      */
     public User getAgeByName(String name) {
+
+        //jpa自带函数排序
+        //无分页
+        /*List<String> sortProp = new ArrayList<>();
+        sortProp.add("name");
+        sortProp.add("id");
+        Sort sort = new Sort(Sort.Direction.ASC, sortProp);
+        userRepository.findAll(sort);
+        //分页
+        List<String> sortProp = new ArrayList<>();
+        sortProp.add("name");
+        sortProp.add("id");
+        Sort sort = new Sort(Sort.Direction.ASC, sortProp);
+
+        pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
+        userRepository.findAll(pageable);*/
+
         Optional<User> userOptional = userRepository.getAgeByName(name);
         User user = null;
         if(userOptional.isPresent()) {
